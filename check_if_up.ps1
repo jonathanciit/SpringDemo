@@ -1,19 +1,11 @@
 # Define the URL of the application
 $AppUrl = "http://localhost:8888"
 
-# Ignore SSL certificate errors (not recommended for production)
-[System.Net.ServicePointManager]::ServerCertificateValidationCallback = {$true}
-
-# Make an HTTP request to the application's health endpoint or root URL
+# Make an HTTP request using curl for debugging
 try {
-    $Response = Invoke-WebRequest -Uri $AppUrl -UseBasicParsing
-    if ($Response.StatusCode -eq 200) {
-        Write-Host "Application is accessible."
-    } else {
-        Write-Host ("Application is not accessible. HTTP response code: " + $Response.StatusCode)
-        exit 1
-    }
+    $response = & curl -Uri $AppUrl
+    Write-Host "Response: $response"
 } catch {
-    Write-Host ("Application is not accessible. Error: " + $_.Exception.Message)
+    Write-Host ("Error: " + $_.Exception.Message)
     exit 1
 }
